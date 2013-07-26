@@ -1,0 +1,95 @@
+html {
+
+    div.page {
+        position: relative;
+        width: 980px;
+        margin: 0 auto;
+    }
+}
+
+
+.coin {
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+
+    &.red {
+        background-color: red;
+    }
+
+    &.yellow {
+        background-color: #FAF200;
+    }
+}
+
+div.clear {
+    clear: both;
+}
+
+div.stack {
+    width: 150px;
+
+    &.yellow {
+        float: left;
+    }
+
+    &.red {
+        float: right;
+    }
+
+}
+
+div.board {
+    position: absolute;
+    top: 25px;
+    left: 200px;
+
+    table.entries {
+        position: relative;
+        margin: 0 auto;
+        z-index: 1;
+
+        tr {
+            height: 25px;
+
+            td {
+                width: 79px;
+                background-color: darkblue;
+                border-top: 0;
+                border-radius: 0;
+                border-bottom: 0;
+                height: 8px;
+                outline: 0;
+
+                &.droppable {
+                    background-color: black;
+                }
+            }
+        }
+    }
+
+    table.slots {
+        margin: 0 auto;
+        border-spacing: 0px;
+        border: 8px solid darkblue;
+        position: relative;
+        z-index: 5;
+
+        tr {
+
+            td {
+                width: 55px;
+                border-width: 6px 12px 6px 12px;
+                border-style: solid;
+                border-color: blue;
+                border-radius: 32px;
+                outline: 12px solid blue;
+                outline-offset: -10px;
+                height: 55px;
+            }
+        }
+    }
+}

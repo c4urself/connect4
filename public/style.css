@@ -1,94 +1,101 @@
 html {
+    font-family: Arial;
+}
 
-    div.page {
-        position: relative;
-        width: 980px;
-        margin: 0 auto;
-    }
+h1 {
+    color: blue;
 }
 
 
-.coin {
+div.page {
     position: relative;
-    z-index: 2;
-    display: inline-block;
-    width: 70px;
-    height: 70px;
-    border-radius: 35px;
+    width: 980px;
+    margin: 0px auto;
 
-    &.red {
-        background-color: red;
+    div.toolbar {
+        width: 450px;
+        margin: 25px auto;
+        text-align: center;
     }
 
-    &.yellow {
-        background-color: #FAF200;
-    }
-}
+    div.stack {
+        width: 150px;
 
-div.clear {
-    clear: both;
-}
+        &.yellow {
+            float: left;
+        }
 
-div.stack {
-    width: 150px;
+        &.red {
+            float: right;
+        }
 
-    &.yellow {
-        float: left;
-    }
+        .coin {
+            position: relative;
+            z-index: 2;
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            border-radius: 35px;
 
-    &.red {
-        float: right;
-    }
+            &.red {
+                background-color: red;
+            }
 
-}
-
-div.board {
-    position: absolute;
-    top: 25px;
-    left: 200px;
-
-    table.entries {
-        position: relative;
-        margin: 0 auto;
-        z-index: 1;
-
-        tr {
-            height: 25px;
-
-            td {
-                width: 79px;
-                background-color: darkblue;
-                border-top: 0;
-                border-radius: 0;
-                border-bottom: 0;
-                height: 8px;
-                outline: 0;
-
-                &.droppable {
-                    background-color: black;
-                }
+            &.yellow {
+                background-color: #FAF200;
             }
         }
     }
 
-    table.slots {
-        margin: 0 auto;
-        border-spacing: 0px;
-        border: 8px solid darkblue;
+    div.board {
         position: relative;
-        z-index: 5;
+        top: 25px;
 
-        tr {
+        table.entries {
+            position: relative;
+            margin: 0 auto;
+            z-index: 1;
 
-            td {
-                width: 55px;
-                border-width: 6px 12px 6px 12px;
-                border-style: solid;
-                border-color: blue;
-                border-radius: 32px;
-                outline: 12px solid blue;
-                outline-offset: -10px;
-                height: 55px;
+            tr {
+                height: 25px;
+
+                td {
+                    width: 77px;
+                    background-color: darkblue;
+                    border-top: 0;
+                    border-radius: 0;
+                    border-bottom: 0;
+                    height: 8px;
+                    outline: 0;
+
+                    &.droppable {
+                        background-color: lightblue;
+                    }
+                }
+            }
+        }
+
+        table.slots {
+            margin: 0 auto;
+            border-spacing: 0px;
+            border: 8px solid darkblue;
+            position: relative;
+            z-index: 5;
+
+            tr {
+
+                td {
+                    width: 54px;
+                    border-width: 6px 12px 6px 12px;
+                    border-style: solid;
+                    border-color: blue;
+                    border-radius: 32px;
+                    outline: 12px solid blue;
+                    outline-offset: -10px;
+
+
+                    height: 56px;
+                }
             }
         }
     }

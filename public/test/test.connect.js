@@ -1,6 +1,5 @@
 describe('Connect Four', function () {
     before(function () {
-        console.log('be');
         connect.HEIGHT = 4;
         connect.WIDTH = 5;
         connect.start();
@@ -54,7 +53,6 @@ describe('Connect Four', function () {
             connect.start();
         });
         it('horizontal win', function () {
-            console.log(2);
             connect.rows = [
                 [0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],

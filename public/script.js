@@ -5,43 +5,49 @@ window.connect = window.connect || {
     rows: [],
     cols: [],
     filled: [],
+    won: false,
     currentPlayer: 'red',
 
     pageX: function () {
         return $('.page').offset().left;
     },
 
-    info: function (msg) {
+    info: function (msg, log) {
         var $info = $('.toolbar h1').text(msg).slideDown();
-        /*
-        setTimeout(function () {
-            $info.slideUp('slow');
-        }, 2000);
-        */
+        if (log) {
+            console.warn(msg);
+        }
     },
 
     numOfCoins: function () {
         return this.WIDTH * this.HEIGHT / 2;
     },
 
+    _genCoin: function (color) {
+        var $coin = $('<div class="coin ' + color + '"></div>');
+        $coin.draggable();
+        return $coin;
+    },
+
     genCoins: function (color) {
         var $stack = $('.stack.' + color);
         for (var i=0; i<this.numOfCoins(); i++) {
-            var $coin = $('<div class="coin ' + color + '"></div>');
-            $coin.draggable();
-            $stack.append($coin);
+            $stack.append(this._genCoin(color));
         }
         $('.coin.yellow').draggable('disable');
     },
 
     onCoinDrop: function (e, ui) {
         var that = this,
+            b = this.board,
             $entry = $(e.target),
             $coin = ui.draggable,
             pos = $coin.offset(),
-            col = $entry.data('col'),
-            slot = this.reserveSlot(col),
-            dy = this.board.offset().top + this.board.height() - ($coin.height() * (this.HEIGHT - slot));
+            col = $entry.data('col');
+
+        var slotsLeft = this.reserveSlot($coin, col);
+
+        if (!slotsLeft) return;
 
         $entry.removeClass('droppable');
 
@@ -50,44 +56,49 @@ window.connect = window.connect || {
             'position': 'absolute',
             'top': pos.top,
             'left': ($entry.offset().left) - this.pageX()
-        });
-
-        this.saveSlot($coin, slot, col);
-
-        if (this.check()) {
-            this.info('Finished: ' + this.currentPlayer + ' won!');
-        }
-
-        $coin.animate({
-            top: dy
-        }, 500, function () {
-            //console.log('cycle player');
-            that.cyclePlayer.apply(that);
-        });
+        }).animate({
+            top: b.offset().top + b.height() - ($coin.height() * (this.HEIGHT - slotsLeft))
+        }, 500);
     },
 
     cyclePlayer: function () {
-        var that = this;
-        var previousPlayer = this.currentPlayer;
+        if (this.check()) {
+            this.finish();
+            return;
+        }
+
+        var previousPlayer = this.currentPlayer,
+            that = this;
+
         this.currentPlayer = this.currentPlayer === 'red' ? 'yellow' : 'red';
-        //console.log('New player: ' + this.currentPlayer);
-        //console.log('Old player: ' + previousPlayer);
         $('.coin.' + previousPlayer).draggable('disable').on('dblclick click', function () {
-            that.info('It\'s ' + that.currentPlayer + '\'s turn!');
+            that.info('It\'s ' + that.currentPlayer + '\'s turn!', 1);
         });
         $('.coin.' + this.currentPlayer).off('click dblclick').draggable('enable');
     },
 
-    reserveSlot: function (col) {
+    /**
+     * Given a `$coin` and a `col` reserves a row and updates matrix values
+     *
+     * returns
+     */
+    reserveSlot: function ($coin, col) {
         this.filled[col] = this.filled[col] || 0;
-        if (this.filled[col] === this.HEIGHT) {
-            alert('Already full');
+        if (!$coin.hasClass(this.currentPlayer)) {
+            this.info('Not your turn', 1);
+            return -1;
+        } else if (this.filled[col] === this.HEIGHT) {
+            this.info('Already full', 1);
+            return -1;
         } else {
-            return this.HEIGHT - ++this.filled[col];
+            var slot = this.HEIGHT - ++this.filled[col];
+            this._saveSlot($coin, slot, col);
+            this.cyclePlayer();
+            return slot;
         }
     },
 
-    saveSlot: function ($coin, row, col) {
+    _saveSlot: function ($coin, row, col) {
         var val = $coin.hasClass('yellow') ? 'y' : 'r';
         this.cols[col][row] = val;
         this.rows[row][col] = val;
@@ -168,6 +179,14 @@ window.connect = window.connect || {
         this.rows = [];
         this.cols = [];
         this.filled = [];
+        this.won = false;
+        this.currentPlayer = 'red';
+    },
+
+    finish: function () {
+        this.won = true;
+        $('.coin').draggable('disable');
+        this.info('Finished: ' + this.currentPlayer + ' won!');
     },
 
     start: function () {
